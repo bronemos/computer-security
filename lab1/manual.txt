@@ -1,0 +1,10 @@
+Manager je pisan u Pythonu 3.9.2 (trebao bi raditi za verzije iznad 3.8) koristeći pycryptodome biblioteku.
+
+Inicijalizacija:
+python manager.py -init master_password
+
+Pohrana:
+python manager.py -put master_password address address_password
+
+Dohvaćanje:
+python manager.py -get master_password address

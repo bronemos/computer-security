@@ -1,0 +1,10 @@
+Password Manager radi na način da se najprije inicijalizira master lozinkom.
+Prilikom inicijalizacije u binarnu datoteku se upisuje prazan enkriptirani json objekt.
+Pozivom naredbe get datoteka se dekriptira i iz jsona se dohvaća potrebni sadržaj.
+Pozivom naredbe put datoteka se dekriptira, dodaje se sadržaj te se ponovo enkriptira.
+Ključ za enkripciju se generira funkcijom scrypt koja je u dokumentaciji pycryptodomea 
+preporučena kao sigurnija zamjena za PBKDF2. Sigurnosni zahtjevi su zadovoljeni enkripcijom 
+pomoću AES-a (GCM mode) cijele datoteke prilikom koje se svaki put iznova generira salt i 
+nonce potrebni za enkripciju, oni se zapisuju na pocetku datoteke zajedno sa odgovarajućim 
+tagom na kraju datoteke. Pomoću tih podataka prilikom iduće enkripcije je moguće
+provjeriti je li datoteka nedozvoljeno modificirana.
