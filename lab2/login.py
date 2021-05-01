@@ -4,6 +4,7 @@ import json
 from getpass import getpass
 from json.decoder import JSONDecodeError
 from hashlib import scrypt
+import secrets
 
 password_check_regex = re.compile(
     r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
@@ -18,9 +19,22 @@ def login(username: str):
         except JSONDecodeError:
             print("Username or password incorrect.", file=sys.stderr)
             exit(1)
-        if username not in storage or storage[username][0] != password:
+
+        if (
+            username not in storage
+            or storage[username][0]
+            != scrypt(
+                password=password.encode("utf-8"),
+                salt=bytes.fromhex(storage[username][2]),
+                n=16384,
+                r=8,
+                p=1,
+                dklen=32,
+            ).hex()
+        ):
             print("Username or password incorrect.", file=sys.stderr)
             exit(1)
+
         if storage[username][1]:
             new_password = getpass(prompt="New password: ")
             new_password_repeated = getpass(prompt="Repeat new password: ")
@@ -45,7 +59,22 @@ def login(username: str):
                 )
                 exit(1)
 
-            storage.update({username: (new_password, False)})
+            storage.update(
+                {
+                    username: (
+                        scrypt(
+                            password=new_password.encode(encoding="utf-8"),
+                            salt=(salt := secrets.token_bytes(32)),
+                            n=16384,
+                            r=8,
+                            p=1,
+                            dklen=32,
+                        ).hex(),
+                        False,
+                        salt.hex(),
+                    )
+                }
+            )
             f.seek(0)
             f.truncate()
             json.dump(storage, f)

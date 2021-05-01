@@ -2,6 +2,7 @@ import argparse
 import sys
 import json
 import re
+import secrets
 from getpass import getpass
 from json.decoder import JSONDecodeError
 from hashlib import scrypt
@@ -24,7 +25,7 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def add(username: str):
-    with open("storage.json", "r", encoding="utf-8") as f:
+    with open("storage.json", "w+", encoding="utf-8") as f:
         try:
             storage: dict = json.load(f)
             if username in storage:
@@ -55,7 +56,23 @@ def add(username: str):
             storage: dict = json.load(f)
         except JSONDecodeError:
             storage = dict()
-        storage.update({username: (password, False)})
+
+        storage.update(
+            {
+                username: (
+                    scrypt(
+                        password=password.encode(encoding="utf-8"),
+                        salt=(salt := secrets.token_bytes(32)),
+                        n=16384,
+                        r=8,
+                        p=1,
+                        dklen=32,
+                    ).hex(),
+                    False,
+                    salt.hex(),
+                )
+            }
+        )
         f.seek(0)
         f.truncate()
         json.dump(storage, f)
@@ -96,9 +113,24 @@ def passwd(username: str):
                 file=sys.stderr,
             )
             exit(1)
-        storage.update({username: (password, storage[username][1])})
+        storage.update(
+            {
+                username: (
+                    scrypt(
+                        password=password.encode(encoding="utf-8"),
+                        salt=(salt := secrets.token_bytes(32)),
+                        n=16384,
+                        r=8,
+                        p=1,
+                        dklen=32,
+                    ).hex(),
+                    storage[username][1],
+                    salt.hex(),
+                )
+            }
+        )
         f.seek(0)
-        f.trunacte()
+        f.truncate()
         json.dump(storage, f)
 
     print("Password change successful.")
@@ -120,7 +152,7 @@ def forcepass(username: str):
                 file=sys.stderr,
             )
             exit(1)
-        storage.update({username: (storage[username][0], True)})
+        storage.update({username: (storage[username][0], True, storage[username][2])})
         f.seek(0)
         f.truncate()
         json.dump(storage, f)
