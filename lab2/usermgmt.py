@@ -3,6 +3,7 @@ import sys
 import json
 import re
 import secrets
+import os
 from getpass import getpass
 from json.decoder import JSONDecodeError
 from hashlib import scrypt
@@ -25,7 +26,7 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def add(username: str):
-    with open("storage.json", "w+", encoding="utf-8") as f:
+    with open("storage.json", "r+", encoding="utf-8") as f:
         try:
             storage: dict = json.load(f)
             if username in storage:
@@ -179,6 +180,10 @@ def del_(username: str):
 
 
 def main():
+    if not os.path.isfile("storage.json"):
+        with open("storage.json", "w+") as f:
+            pass
+
     instruction_dict = {
         "add": add,
         "passwd": passwd,

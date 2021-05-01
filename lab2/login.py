@@ -1,6 +1,7 @@
 import sys
 import re
 import json
+import os
 from getpass import getpass
 from json.decoder import JSONDecodeError
 from hashlib import scrypt
@@ -83,6 +84,10 @@ def login(username: str):
 
 
 def main():
+    if not os.path.isfile("storage.json"):
+        with open("storage.json", "w+") as f:
+            pass
+
     if len(sys.argv) > 2:
         print(
             f"Invalid number of arguments.\nUsage: python {sys.argv[0]} [username]",
