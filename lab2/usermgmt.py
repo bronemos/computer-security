@@ -74,6 +74,7 @@ def add(username: str):
                 )
             }
         )
+
         f.seek(0)
         f.truncate()
         json.dump(storage, f)
@@ -108,12 +109,14 @@ def passwd(username: str):
                 file=sys.stderr,
             )
             exit(1)
+
         if username not in storage:
             print(
                 "Password change failed. Requested user does not exist.",
                 file=sys.stderr,
             )
             exit(1)
+
         storage.update(
             {
                 username: (
@@ -130,6 +133,7 @@ def passwd(username: str):
                 )
             }
         )
+
         f.seek(0)
         f.truncate()
         json.dump(storage, f)
@@ -147,12 +151,14 @@ def forcepass(username: str):
                 file=sys.stderr,
             )
             exit(1)
+
         if username not in storage:
             print(
                 "Force password change failed. Requested user does not exist.",
                 file=sys.stderr,
             )
             exit(1)
+
         storage.update({username: (storage[username][0], True, storage[username][2])})
         f.seek(0)
         f.truncate()
@@ -168,9 +174,11 @@ def del_(username: str):
         except JSONDecodeError:
             print("User delete failed. Requested user does not exist.", file=sys.stderr)
             exit(1)
+
         if username not in storage:
             print("User delete failed. Requested user does not exist.", file=sys.stderr)
             exit(1)
+
         storage.pop(username)
         f.seek(0)
         f.truncate()

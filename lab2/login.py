@@ -76,6 +76,7 @@ def login(username: str):
                     )
                 }
             )
+
             f.seek(0)
             f.truncate()
             json.dump(storage, f)
@@ -94,6 +95,7 @@ def main():
             file=sys.stderr,
         )
         exit(1)
+
     login(sys.argv[1])
 
 

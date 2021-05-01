@@ -1,0 +1,19 @@
+Alati za upravljanje korisnicima i prijavu su ostvareni uporabom scrypt funkcije za derivaciju ključa iz hashlib-a.
+
+
+Opis rada:
+
+Alat za upravljanje korisnicima
+=====================================
+Prilikom dodavanja korisnika i modifikacija postojećih lozinke se pretvaraju u byteove i 
+računa se njihov sažetak uporabom salta koji se generira neposredno prije.
+Podaci se zatim pohranjuju u Python dictionary koji se zatim pretvara u json format i pohranjuje se u datoteku.
+Dictionary za ključ ima username dok mu je vrijednost Tuple sa redom: sažetkom u hex obliku, booleanom 
+koji govori je li zahtjev prisilnom promjenom lozinke pokrenut te salt u hex obliku.
+
+Alat za prijavu
+=====================================
+Prilikom pokretanja provjera ispravnosti lozinke se vrši na način da se izračunava njezin sažetak uporabom
+pohranjenog salta u dictionaryju te se vrši provjera jednakosti sa pohranjenim sažetkom u dictionaryju.
+Neovisno o tipu greške koja se dogodi u programu (čak i ako je storage prazan) korisniku se dojavljuje da
+je greška u usernameu ili lozinci, ovime se korisniku otežavaju pokušaji neovlaštenog pristupa podacima.

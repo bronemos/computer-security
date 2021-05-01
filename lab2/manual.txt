@@ -1,0 +1,21 @@
+Alati su pisani u Pythonu 3.9.2 (trebali bi raditi i za verzije 3.8+) koristeći isključivo ugrađene Pythonove biblioeteke.
+
+usermgmt.py
+===============
+
+Dodavanje usera:
+python usermgmt.py -add username
+
+Promjena lozinke:
+python usermgmt.py -passwd username
+
+Zahtjev za mijenjanjem lozinke pri idućem loginu:
+python usermgmt.py -forcepass username
+
+Brisanje usera:
+python usermgmt.py -del username
+
+login.py
+===============
+
+python login.py username
