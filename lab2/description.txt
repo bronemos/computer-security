@@ -3,6 +3,10 @@ Alati za upravljanje korisnicima i prijavu su ostvareni uporabom scrypt funkcije
 
 Opis rada:
 
+I u slučaju admina i korisnika lozinkama se provjerava složenost tj. moraju sadržavati barem 8 znakova među kojima
+mora biti barem jedno veliko i malo slovo, specijalan znak i broj. Također je korišten pythonov getpass modul
+koji zahtjeva interaktivnost, tj. onemogućuje unos lozinki echoanjem.
+
 Alat za upravljanje korisnicima
 =====================================
 Prilikom dodavanja korisnika i modifikacija postojećih lozinke se pretvaraju u byteove i 
@@ -16,4 +20,20 @@ Alat za prijavu
 Prilikom pokretanja provjera ispravnosti lozinke se vrši na način da se izračunava njezin sažetak uporabom
 pohranjenog salta u dictionaryju te se vrši provjera jednakosti sa pohranjenim sažetkom u dictionaryju.
 Neovisno o tipu greške koja se dogodi u programu (čak i ako je storage prazan) korisniku se dojavljuje da
-je greška u usernameu ili lozinci, ovime se korisniku otežavaju pokušaji neovlaštenog pristupa podacima.
+je greška u usernameu ili lozinki, ovime se potencijalnom napadaču otežavaju pokušaji neovlaštenog pristupa podacima.
+Alat također ima funkcionalnost provjere broja pokušaja prijava i timeout nakon previše neuspjelih pokušaja.
+Svaki put kada se timeout aktivira vrijeme koje je potrebno provesti čekajući na idući pokušaj se množi fiksnim
+multiplierom. Ovime se dodatno otežavaju napadaču pokušaji da pogodi lozinku.
+U slučaju kada je korisnik označen za promjenu lozinke vrši se provjera jesu li nova i stara lozinka jednake, ako jesu
+korisniku se dojavljuje upozorenje da moraju biti različite.
+
+Sigurnosni zahtjevi
+=====================================
+Lozinke se štite hashiranjem uporabom scrypt funkcije. Funkcija također koristi salt kojim se dodatno smanjuje šansa
+kolizija tj. istih hasheva za različite podatke. S obzirom da je hash funkcija jednosmjerna, a usporedba hasheva se koristi
+za prijavu mogućnost provale grubom silom jako je mala s obzirom da bi napadač morao isprobati jako veliki broj lozinki.
+Ovo dodatno otežava spomenuti timeout.
+U slučaju da napadač uspije doći do datoteke s lozinkama njihova tajnost je očuvana jer napadač nema načina da iz hasheva
+dobije lozinke.
+Za očuvanje integriteta pretpostavljam da iako bi potencijalni napadač bio u mogućnosti doći do podataka on ih ne bi bio u mogućnosti mijenjati
+na nekom udaljenom poslužiteljskom računalu gdje bi ovaj servis bio hostan (za to bi se brinuli drugi mehanizmim zaštite) samim time integritet je očuvan.
