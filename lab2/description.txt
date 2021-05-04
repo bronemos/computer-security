@@ -9,7 +9,7 @@ Prilikom dodavanja korisnika i modifikacija postojećih lozinke se pretvaraju u 
 računa se njihov sažetak uporabom salta koji se generira neposredno prije.
 Podaci se zatim pohranjuju u Python dictionary koji se zatim pretvara u json format i pohranjuje se u datoteku.
 Dictionary za ključ ima username dok mu je vrijednost Tuple sa redom: sažetkom u hex obliku, booleanom 
-koji govori je li zahtjev prisilnom promjenom lozinke pokrenut te salt u hex obliku.
+koji govori je li zahtjev za promjenom lozinke pokrenut te salt u hex obliku.
 
 Alat za prijavu
 =====================================
