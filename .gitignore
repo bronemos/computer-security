@@ -131,3 +131,4 @@ dmypy.json
 .vscode
 storage.bin
 storage.json
+*.zip

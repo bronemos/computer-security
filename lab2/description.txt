@@ -3,10 +3,6 @@ Alati za upravljanje korisnicima i prijavu su ostvareni uporabom scrypt funkcije
 
 Opis rada:
 
-I u slučaju admina i korisnika lozinkama se provjerava složenost tj. moraju sadržavati barem 8 znakova među kojima
-mora biti barem jedno veliko i malo slovo, specijalan znak i broj. Također je korišten pythonov getpass modul
-koji zahtjeva interaktivnost, tj. onemogućuje unos lozinki echoanjem.
-
 Alat za upravljanje korisnicima
 =====================================
 Prilikom dodavanja korisnika i modifikacija postojećih lozinke se pretvaraju u byteove i 
@@ -29,10 +25,15 @@ korisniku se dojavljuje upozorenje da moraju biti različite.
 
 Sigurnosni zahtjevi
 =====================================
+I u slučaju admina i korisnika lozinkama se provjerava složenost tj. moraju sadržavati barem 8 znakova među kojima
+mora biti barem jedno veliko i malo slovo, specijalan znak i broj. Također je korišten pythonov getpass modul
+koji zahtjeva interaktivnost, tj. onemogućuje unos lozinki echoanjem i onemogućuje shoulder surfing.
 Lozinke se štite hashiranjem uporabom scrypt funkcije. Funkcija također koristi salt kojim se dodatno smanjuje šansa
 kolizija tj. istih hasheva za različite podatke. S obzirom da je hash funkcija jednosmjerna, a usporedba hasheva se koristi
 za prijavu mogućnost provale grubom silom jako je mala s obzirom da bi napadač morao isprobati jako veliki broj lozinki.
 Ovo dodatno otežava spomenuti timeout.
+Forcepass omogućuje promjenu lozinke adminu bez da zna staru, ako pretpostavimo da adminu neće zloporabiti svoje ovlasti,
+ovo je dodatni oblik zaštite.
 U slučaju da napadač uspije doći do datoteke s lozinkama njihova tajnost je očuvana jer napadač nema načina da iz hasheva
 dobije lozinke.
 Za očuvanje integriteta pretpostavljam da iako bi potencijalni napadač bio u mogućnosti doći do podataka on ih ne bi bio u mogućnosti mijenjati
